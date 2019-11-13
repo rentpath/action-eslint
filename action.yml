@@ -1,0 +1,19 @@
+name: 'eslint and tslint'
+description: 'Run eslint and tslint using reviewdog to update check runs with detailed info.'
+author: 'haya14busa (reviewdog)'
+inputs:
+  github_token:
+    description: 'GITHUB_TOKEN.'
+    required: true
+  lint_dirs:
+    description: "Directories to lint. Default: '.'"
+    default: '.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.github_token }}
+    - ${{ inputs.lint_dirs }}
+branding:
+  icon: 'alert-octagon'
+  color: 'blue'
