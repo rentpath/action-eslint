@@ -2,7 +2,7 @@
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-yarn add \
+npm install -g \
   @rentpath/eslint-config-rentpath@3.0.1 \
   eslint@5.12.1 \
   eslint-import-resolver-alias@1.1.2 \
@@ -13,11 +13,11 @@ yarn add \
   tslint-lines-between-class-members@1.2.4 \
   tslint-no-circular-imports@0.7.0
 
-$(yarn bin)/eslint --version
-$(yarn bin)/tslint --version
+eslint --version
+tslint --version
 
-/eslint -f="stylish" "${INPUT_LINT_DIRS:-'.'}" \
+eslint -f="stylish" "${INPUT_LINT_DIRS:-'.'}" \
     | reviewdog -f="eslint" -reporter=github-pr-check
 
-$(yarn bin)/tslint -p . -c tslint.json \
+tslint -p . -c tslint.json \
     | reviewdog -f="tslint" -reporter=github-pr-check
