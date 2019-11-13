@@ -1,17 +1,22 @@
 #!/bin/sh
 
-cd "$GITHUB_WORKSPACE"
-
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-if [ ! -f "$(npm bin)/eslint" ]; then
-    yarn install
-fi
+yarn add \
+  @rentpath/eslint-config-rentpath@3.0.1 \
+  eslint@5.12.1 \
+  eslint-import-resolver-alias@1.1.2 \
+  eslint-plugin-mocha@5.2.1 \
+  eslint-plugin-standard@4.0.1 \
+  tslint@5.20.0 \
+  tslint-import-group-ordering@2.1.1 \
+  tslint-lines-between-class-members@1.2.4 \
+  tslint-no-circular-imports@0.7.0
 
 $(yarn bin)/eslint --version
 $(yarn bin)/tslint --version
 
-$(yarn bin)/eslint -f="stylish" "${INPUT_LINT_DIRS:-'.'}" \
+/eslint -f="stylish" "${INPUT_LINT_DIRS:-'.'}" \
     | reviewdog -f="eslint" -reporter=github-pr-check
 
 $(yarn bin)/tslint -p . -c tslint.json \
