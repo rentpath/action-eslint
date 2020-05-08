@@ -16,11 +16,11 @@ if [ "${INPUT_TSLINT}" == 'true' ]; then
 
   if [ "${INPUT_REPORTER}" == 'github-pr-review' ]; then
     # Use jq and github-pr-review reporter to format result to include link to rule page.
-    $LINT_BIN/tslint -p ${INPUT_LINT_DIRS:-'.'} -c "${INPUT_STYLELINT_CONFIG:-tslint.json}" -f json \
+    $LINT_BIN/tslint --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_STYLELINT_CONFIG:-tslint.json}" --format json \
       | jq -r '.[] | {filePath: .filePath, messages: .messages[]} | "\(.filePath):\(.messages.line):\(.messages.column):\(.messages.message) [\(.messages.ruleId)](https://eslint.org/docs/rules/\(.messages.ruleId))"' \
       | reviewdog -efm="%f:%l:%c:%m" -name="${INPUT_NAME}:-tslint}" -reporter=github-pr-review -level="${INPUT_LEVEL}"
   else
-    $LINT_BIN/tslint -t="stylish" -p ${INPUT_LINT_DIRS:-'.'} -c "${INPUT_STYLELINT_CONFIG:-tslint.json}" \
+    $LINT_BIN/tslint --format="stylish" --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_STYLELINT_CONFIG:-tslint.json}" \
       | reviewdog -f="tslint" -name="${INPUT_NAME:-tslint}" -reporter="${INPUT_REPORTER:-github-pr-check}" -level="${INPUT_LEVEL}"
   fi
 else
