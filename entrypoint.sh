@@ -28,12 +28,11 @@ else
 
   if [ "${INPUT_REPORTER}" == 'github-pr-review' ]; then
     # Use jq and github-pr-review reporter to format result to include link to rule page.
-    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_LINT_CONFIG}" -f json \
+    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'}  --ext="${INPUT_LINT_EXT}" --config "${INPUT_LINT_CONFIG}" -f json \
       | jq -r '.[] | {filePath: .filePath, messages: .messages[]} | "\(.filePath):\(.messages.line):\(.messages.column):\(.messages.message) [\(.messages.ruleId)](https://eslint.org/docs/rules/\(.messages.ruleId))"' \
       | reviewdog -efm="%f:%l:%c:%m" -name="${INPUT_NAME}:-eslint}" -reporter=github-pr-review -level="${INPUT_LEVEL}"
   else
-    echo "eslint ${INPUT_LINT_DIRS:-'.'} --config \"${INPUT_LINT_CONFIG}\""
-    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_LINT_CONFIG}" \
+    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'}  --ext="${INPUT_LINT_EXT}" --config "${INPUT_LINT_CONFIG}" \
       | reviewdog -f="eslint" -name="${INPUT_NAME:-eslint}" -reporter="${INPUT_REPORTER:-github-pr-check}" -level="${INPUT_LEVEL}"
   fi
 fi

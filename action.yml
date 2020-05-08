@@ -17,6 +17,8 @@ inputs:
   lint_dirs:
     description: "Directories to lint. Default: '.'"
     default: '.'
+  lint_ext:
+    decription: "Eslint `--ext` flag. Defaults: <eslint default>"
   tslint:
     description: "Use tslint instead"
     default: false
