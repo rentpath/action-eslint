@@ -4,15 +4,16 @@ set -e
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-LINT_BIN=/npm/node_modules/.bin
-
 cd $GITHUB_WORKSPACE
+
+if [ ! -f "$(npm bin)/eslint" ]; then
+  npm install
+fi
+
+LINT_BIN=/npm/node_modules/.bin
 
 if [ "${INPUT_TSLINT}" == 'true' ]; then
   $LINT_BIN/tslint --version
-
-  $LINT_BIN/tslint -p . -c tslint.json -t  \
-    | reviewdog -f="tslint" -reporter=github-pr-check
 
   if [ "${INPUT_REPORTER}" == 'github-pr-review' ]; then
     # Use jq and github-pr-review reporter to format result to include link to rule page.
