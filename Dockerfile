@@ -8,6 +8,8 @@ rm /var/cache/apk/*
 COPY entrypoint.sh /entrypoint.sh
 COPY package.json yarn.lock /npm/
 
-RUN cd /npm && yarn install
+RUN cd /npm
+RUN yarn config set "@rentpath:registry" https://npm.pkg.github.com
+RUN yarn install
 
 ENTRYPOINT ["/entrypoint.sh"]
