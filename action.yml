@@ -18,7 +18,8 @@ inputs:
     description: "Directories to lint. Default: '.'"
     default: '.'
   lint_ext:
-    decription: "Eslint `--ext` flag. Defaults: <eslint default>"
+    decription: "Eslint `--ext` flag. Defaults: .js,.jsx,.ts,.tsx"
+    default: '.js,.ts,.tsx'
   tslint:
     description: "Use tslint instead"
     default: false
