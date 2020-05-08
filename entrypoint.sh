@@ -16,11 +16,11 @@ if [ "${INPUT_TSLINT}" == 'true' ]; then
 
   if [ "${INPUT_REPORTER}" == 'github-pr-review' ]; then
     # Use jq and github-pr-review reporter to format result to include link to rule page.
-    $LINT_BIN/tslint --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_STYLELINT_CONFIG:-tslint.json}" --format json \
+    $LINT_BIN/tslint --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUTLINT_CONFIG:-tslint.json}" --format json \
       | jq -r '.[] | {filePath: .filePath, messages: .messages[]} | "\(.filePath):\(.messages.line):\(.messages.column):\(.messages.message) [\(.messages.ruleId)](https://eslint.org/docs/rules/\(.messages.ruleId))"' \
       | reviewdog -efm="%f:%l:%c:%m" -name="${INPUT_NAME}:-tslint}" -reporter=github-pr-review -level="${INPUT_LEVEL}"
   else
-    $LINT_BIN/tslint --format="stylish" --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_STYLELINT_CONFIG:-tslint.json}" \
+    $LINT_BIN/tslint --format="stylish" --project ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_LINT_CONFIG:-tslint.json}" \
       | reviewdog -f="tslint" -name="${INPUT_NAME:-tslint}" -reporter="${INPUT_REPORTER:-github-pr-check}" -level="${INPUT_LEVEL}"
   fi
 else
@@ -28,11 +28,12 @@ else
 
   if [ "${INPUT_REPORTER}" == 'github-pr-review' ]; then
     # Use jq and github-pr-review reporter to format result to include link to rule page.
-    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_STYLELINT_CONFIG}" -f json \
+    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_LINT_CONFIG}" -f json \
       | jq -r '.[] | {filePath: .filePath, messages: .messages[]} | "\(.filePath):\(.messages.line):\(.messages.column):\(.messages.message) [\(.messages.ruleId)](https://eslint.org/docs/rules/\(.messages.ruleId))"' \
       | reviewdog -efm="%f:%l:%c:%m" -name="${INPUT_NAME}:-eslint}" -reporter=github-pr-review -level="${INPUT_LEVEL}"
   else
-    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_ESLINT_CONFIG}" \
+    echo "eslint ${INPUT_LINT_DIRS:-'.'} --config \"${INPUT_LINT_CONFIG}\""
+    $LINT_BIN/eslint ${INPUT_LINT_DIRS:-'.'} --config "${INPUT_LINT_CONFIG}" \
       | reviewdog -f="eslint" -name="${INPUT_NAME:-eslint}" -reporter="${INPUT_REPORTER:-github-pr-check}" -level="${INPUT_LEVEL}"
   fi
 fi
