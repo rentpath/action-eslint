@@ -6,10 +6,6 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 cd $GITHUB_WORKSPACE
 
-if [ ! -f "$(npm bin)/eslint" ]; then
-  npm install
-fi
-
 LINT_BIN=/npm/node_modules/.bin
 
 if [ "${INPUT_TSLINT}" == 'true' ]; then

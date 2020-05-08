@@ -6,5 +6,8 @@ rm -rf /var/lib/apt/lists/* && \
 rm /var/cache/apk/*
 
 COPY entrypoint.sh /entrypoint.sh
+COPY package.json yarn.lock /npm/
+
+RUN cd /npm && yarn install
 
 ENTRYPOINT ["/entrypoint.sh"]
